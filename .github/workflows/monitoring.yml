@@ -1,0 +1,26 @@
+name: Website Monitoring
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Trigger Uptime Robot
+        run: |
+          curl -X POST "https://api.uptimerobot.com/v2/newMonitor" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "api_key=${{ secrets.UPTIME_ROBOT_API_KEY }}" \
+            -d "format=json" \
+            -d "type=1" \
+            -d "friendly_name=GitHub Action Monitoring" \
+            -d "url=https://ashish4kmax.github.io/devops/"
+        env:
+          UPTIME_ROBOT_API_KEY: ${{ secrets.UPTIME_ROBOT_API_KEY }}
